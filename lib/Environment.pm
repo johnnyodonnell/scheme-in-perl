@@ -30,6 +30,6 @@ sub put : lvalue {
 }
 
 our $global = Environment->new({
-        "key" => "value"
+        "print" => (sub { print "@_\n"; })
     });
 

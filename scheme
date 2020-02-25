@@ -5,6 +5,7 @@ use strict;
 use lib './lib';
 use Environment;
 use Parse;
+use Evaluate;
 
 
 my $filename = shift @ARGV;
@@ -15,5 +16,9 @@ open my $filehandle, "<", $filename
 my $text = do { local $/; <$filehandle> };
 
 
-Parse::parse $text;
+my $ast = Parse::parse $text;
+
+foreach (@$ast) {
+    Evaluate::evaluate $_, $Environment::global;
+}
 
