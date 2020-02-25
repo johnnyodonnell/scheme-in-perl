@@ -13,14 +13,30 @@ sub tokenize {
     /\(|\)|[^\s\(\)]+/g;
 }
 
+sub atom {
+    shift;
+}
+
 sub build_ast {
     my $tokens = shift;
 
+    my @ast_stack = ();
+    my $current_ast = [];
+
     foreach (@$tokens) {
-        print "$_\n";
+        if ($_ eq "(") {
+            my $new_ast = [];
+            push @ast_stack, $current_ast;
+            push @$current_ast, $new_ast;
+            $current_ast = $new_ast;
+        } elsif ($_ eq ")") {
+            $current_ast = pop @ast_stack;
+        } else {
+            push @$current_ast, atom $_;
+        }
     }
 
-    print "\n";
+    $current_ast;
 }
 
 sub parse {
