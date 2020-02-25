@@ -4,6 +4,7 @@ use strict;
 
 use lib './lib';
 use Environment;
+use Parse;
 
 
 my $filename = shift @ARGV;
@@ -14,7 +15,5 @@ open my $filehandle, "<", $filename
 my $text = do { local $/; <$filehandle> };
 
 
-my $var = $Environment::global->get("key");
-
-print "$var\n";
+Parse::parse $text;
 
