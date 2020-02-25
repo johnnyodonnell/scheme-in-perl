@@ -14,7 +14,15 @@ sub tokenize {
 }
 
 sub atom {
-    shift;
+    $_ = shift;
+
+    if (/^\"(.*)\"$/) {
+        { type => "STRING", value => $1 };
+    } elsif (my $number = $_ + 0) {
+        { type => "NUMBER", value => $number };
+    } else {
+        { type => "SYMBOL", value => $_ };
+    }
 }
 
 sub build_ast {
