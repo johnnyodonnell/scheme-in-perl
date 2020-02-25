@@ -1,0 +1,20 @@
+#!/usr/bin/env perl
+
+use strict;
+
+use lib './lib';
+use Environment;
+
+
+my $filename = shift @ARGV;
+
+open my $filehandle, "<", $filename
+    or die "Could not open file $filename $!";
+
+my $text = do { local $/; <$filehandle> };
+
+
+my $var = $Environment::global->get("key");
+
+print "$var\n";
+
