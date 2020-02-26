@@ -30,6 +30,34 @@ sub put : lvalue {
 }
 
 our $global = Environment->new({
-        "print" => (sub { print "@_\n"; })
+        "print" => (sub { print "@_\n"; }),
+        "*" => (sub {
+                my $product = 1;
+
+                foreach (@_) {
+                    $product *= $_;
+                }
+
+                $product;
+            }),
+        "+" => (sub {
+                my $sum = 0;
+
+                foreach (@_) {
+                    $sum += $_;
+                }
+
+                $sum;
+            }),
+        "-" => (sub {
+                my ($left, $right) = @_;
+
+                $left - $right;
+            }),
+        "/" => (sub {
+                my ($left, $right) = @_;
+
+                $left / $right;
+            })
     });
 
