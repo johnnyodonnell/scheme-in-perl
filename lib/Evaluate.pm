@@ -9,9 +9,9 @@ sub evaluate {
 
     if (ref($ast) eq "HASH") {
         if ($ast->{type} eq "SYMBOL") {
-            return $env->get($ast->{value});
+            $env->get($ast->{value});
         } else {
-            return $ast->{value};
+            $ast->{value};
         }
     } elsif ((ref($ast) eq "ARRAY") and (@$ast > 0)) {
         if (ref(@$ast[0]) eq "HASH") {
@@ -24,11 +24,11 @@ sub evaluate {
                 my $params = @$ast[1];
                 my $body = @$ast[2];
 
-                return (sub {
+                (sub {
                         my $localEnv = Environment->new({}, $env);
 
-                        foreach my $i (0 .. @_) {
-                            $localEnv->put(@$params[$i], $_[$i]);
+                        foreach my $i (0 .. (@_ - 1)) {
+                            $localEnv->put(@$params[$i]->{value}, $_[$i]);
                         }
 
                         evaluate($body, $localEnv);
@@ -39,13 +39,13 @@ sub evaluate {
                 my $alt = @$ast[3];
 
                 if (evaluate($test, $env)) {
-                    return evaluate($conseq, $env);
+                    evaluate($conseq, $env);
                 } else {
-                    return evaluate($alt, $env);
+                    evaluate($alt, $env);
                 }
             } else {
-                my $proc = evaluate(shift @$ast, $env);
-                my @args = @$ast;
+                my $proc = evaluate(@$ast[0], $env);
+                my @args = @$ast[1..$#$ast];
 
                 @args = map { evaluate($_, $env); } @args;
                 $proc->(@args);

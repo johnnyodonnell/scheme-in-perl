@@ -58,6 +58,26 @@ our $global = Environment->new({
                 my ($left, $right) = @_;
 
                 $left / $right;
+            }),
+        "<" => (sub {
+                my ($left, $right) = @_;
+
+                $left < $right;
+            }),
+        ">" => (sub {
+                my ($left, $right) = @_;
+
+                $left > $right;
+            }),
+        "<=" => (sub {
+                my ($left, $right) = @_;
+
+                $left <= $right;
+            }),
+        ">=" => (sub {
+                my ($left, $right) = @_;
+
+                $left >= $right;
             })
     });
 
